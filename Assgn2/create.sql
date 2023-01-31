@@ -133,7 +133,7 @@ CREATE TABLE Stay (
     Patient INT NOT NULL,
     Room INT NOT NULL,
     StartTime TIMESTAMP NOT NULL,
-    EndTime INT NOT NULL,
+    EndTime TIMESTAMP NOT NULL,
     FOREIGN KEY (Patient) REFERENCES Patient (SSN),
     FOREIGN KEY (Room) REFERENCES Room (Number)
 );

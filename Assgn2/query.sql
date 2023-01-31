@@ -51,3 +51,111 @@ WHERE
     SSN = Prescribes.Patient
     AND Prescribes.Medication = Medication.Code
     AND Medication.Name = 'remdesivir';
+
+
+SELECT
+    Patient.Name,
+    InsuranceID
+FROM
+    Patient,
+    (
+        SELECT
+            Patient,
+            SUM (EndTime :: date - StartTime :: date)
+        FROM
+            Stay,
+            Room
+        WHERE
+            Stay.Room = Room.Number
+            AND Room.Type = 'icu'
+        GROUP BY
+            Patient
+    ) AS StayCount
+WHERE
+    Patient.SSN = StayCount.Patient;
+
+
+SELECT
+    Nurse.Name
+FROM
+    Nurse,
+    Undergoes,
+    PROCEDURE
+WHERE
+    Nurse.EmployeeID = Undergoes.AssistingNurse
+    AND Undergoes.Procedure = PROCEDURE.Code
+    AND PROCEDURE.Name = 'bypass surgery';
+
+
+SELECT
+    Nurse.Name AS Name,
+    Nurse.Position AS Position,
+    Physician.Name AS AccompanyingPhysician
+FROM
+    Nurse,
+    Undergoes,
+    PROCEDURE,
+    Physician
+WHERE
+    Nurse.EmployeeID = Undergoes.AssistingNurse
+    AND Undergoes.Procedure = PROCEDURE.Code
+    AND PROCEDURE.Name = 'bypass surgery'
+    AND Undergoes.Physician = Physician.EmployeeID;
+
+
+SELECT
+    Physician.Name
+FROM
+    Physician,
+    (
+        SELECT
+            Physician,
+            PROCEDURE
+        FROM
+            Undergoes
+        EXCEPT
+        SELECT
+            Physician,
+            Treatment
+        FROM
+            Trained_In
+    ) AS Untrained
+WHERE
+    Untrained.Physician = Physician.EmployeeID;
+
+
+SELECT
+    Physician.Name
+FROM
+    Trained_In,
+    Undergoes,
+    Physician
+WHERE
+    Undergoes.Procedure = Trained_In.Treatment
+    AND Undergoes.Physician = Trained_In.Physician
+    AND Physician.EmployeeID = Undergoes.Physician
+    AND (
+        Undergoes.Date :: date - Trained_In.CertificationExpires :: date
+    ) > 0;
+
+
+SELECT
+    Physician.Name,
+    PROCEDURE.Name,
+    Undergoes.Date :: date,
+    Patient.Name
+FROM
+    Trained_In,
+    Undergoes,
+    Physician,
+    PROCEDURE,
+    Patient
+WHERE
+    Undergoes.Procedure = Trained_In.Treatment
+    AND Undergoes.Physician = Trained_In.Physician
+    AND Physician.EmployeeID = Undergoes.Physician
+    AND (
+        Undergoes.Date :: date - Trained_In.CertificationExpires :: date
+    ) > 0
+    AND Undergoes.Procedure = PROCEDURE.Code
+    AND Undergoes.Patient = Patient.SSN;

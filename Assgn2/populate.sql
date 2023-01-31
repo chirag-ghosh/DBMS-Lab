@@ -403,6 +403,17 @@ VALUES
         '2023-01-24 17:00'
     );
 
+INSERT INTO
+    Stay
+VALUES
+    (
+        4,
+        222222222,
+        123,
+        '2023-01-19 12:00',
+        '2023-01-21 17:00'
+    );
+
 
 INSERT INTO
     Undergoes
@@ -420,3 +431,9 @@ INSERT INTO
     Undergoes
 VALUES
     (111111111, 3, 3, '2023-01-22', 3, NULL);
+
+
+INSERT INTO
+    Undergoes
+VALUES
+    (222222222, 4, 4, '2023-01-20', 1, NULL);
