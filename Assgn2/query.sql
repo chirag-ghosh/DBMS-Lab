@@ -159,3 +159,35 @@ WHERE
     ) > 0
     AND Undergoes.Procedure = PROCEDURE.Code
     AND Undergoes.Patient = Patient.SSN;
+
+
+SELECT
+    Name,
+    Brand
+FROM
+    (
+        SELECT
+            Medication,
+            COUNT(DISTINCT Patient) AS PCount
+        FROM
+            Prescribes
+        GROUP BY
+            Medication
+    ) AS PrescriptionCount,
+    Medication
+WHERE
+    PCount IN (
+        SELECT
+            MAX (PCount) AS PCount
+        FROM
+            (
+                SELECT
+                    Medication,
+                    COUNT(DISTINCT Patient) AS PCount
+                FROM
+                    Prescribes
+                GROUP BY
+                    Medication
+            ) AS PrescriptionMax
+    )
+    AND PrescriptionCount.Medication = Medication.Code;
