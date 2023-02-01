@@ -191,3 +191,53 @@ WHERE
             ) AS PrescriptionMax
     )
     AND PrescriptionCount.Medication = Medication.Code;
+
+
+SELECT
+    Patient.name AS Patient,
+    Physician.name AS Physician
+FROM
+    Patient,
+    Physician
+WHERE
+    Physician.EmployeeID = Patient.PCP
+    AND EXISTS (
+        SELECT
+            Patient
+        FROM
+            Prescribes
+        WHERE
+            Prescribes.Patient = Patient.SSN
+            AND Prescribes.Physician = Patient.PCP
+    )
+    AND EXISTS (
+        SELECT
+            Patient
+        FROM
+            Undergoes, Procedure
+        WHERE
+            Undergoes.Patient = Patient.SSN
+            AND Undergoes.Procedure = Procedure.Code
+            AND Procedure.Cost > 5000
+    ) AND NOT EXISTS (
+        SELECT
+            DepartmentID
+        FROM
+            Department
+        WHERE
+            Department.Head = Patient.PCP
+    )AND EXISTS (
+        SELECT
+            Appointment.Patient, Count(AppointmentID) AS AppointmentCount
+        FROM
+            Appointment, Affiliated_With, Department
+        WHERE
+            Appointment.Patient = Patient.SSN
+            AND Appointment.Physician = Affiliated_With.Physician
+            AND Affiliated_With.Department = Department.DepartmentID
+            AND Department.Name = 'Cardiology'
+        GROUP BY
+            Appointment.Patient
+        HAVING
+            Count(AppointmentID) >= 2
+    );
