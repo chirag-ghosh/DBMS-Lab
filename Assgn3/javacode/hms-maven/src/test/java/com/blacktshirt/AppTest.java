@@ -1,4 +1,4 @@
-package com.blacktshirt;
+package com.invisiblehat;
 
 import org.junit.jupiter.api.Test;
 
