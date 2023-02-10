@@ -70,22 +70,22 @@ public final class App {
             System.out.println("Database connected");
 
             //enter menu
-            System.out.println("\nWelcome!\n\nPlease select a query. Select 14 to exit!");
+            System.out.println("\nWelcome!\n\nPlease select a query. Select 14 and you exit.");
             while(true) {
-                System.out.println("1-> Names of all physicians who are trained in procedure name “bypass surgery”");
-                System.out.println("2-> Names of all physicians affiliated with the department name “cardiology” and trained in “bypass surgery”");
-                System.out.println("3-> Names of all the nurses who have ever been on call for room 123");
-                System.out.println("4-> Names and addresses of all patients who were prescribed the medication named “remdesivir”");
-                System.out.println("5-> Name and insurance id of all patients who stayed in the “icu” room type for more than 15 days");
-                System.out.println("6-> Names of all nurses who assisted in the procedure name “bypass surgery”");
-                System.out.println("7-> Name and position of all nurses who assisted in the procedure name “bypass surgery” along with the names of and the accompanying physicians");
-                System.out.println("8-> Obtain the names of all physicians who have performed a medical procedure they have never been trained to perform");
-                System.out.println("9-> Names of all physicians who have performed a medical procedure that they are trained to perform, but such that the procedure was done at a date (Undergoes.Date) after the physician's certification expired (Trained_In.CertificationExpires)");
-                System.out.println("10-> Same as the previous query, but include the following information in the results: Physician name, name of procedure, date when the procedure was carried out, name of the patient the procedure was carried out on");
-                System.out.println("11-> Names of all patients (also include, for each patient, the name of the patient's physician), such that all the following are true:\n\t• The patient has been prescribed some medication by his/her physician\n\t• The patient has undergone a procedure with a cost larger that 5000\n\t• The patient has had at least two appointment where the physician was affiliated with the cardiology department\n\t• The patient's physician is not the head of any department");
-                System.out.println("12-> Name and brand of the medication which has been prescribed to the highest number of patients");
-                System.out.println("13-> Names of all physicians who are trained in a procedure");
-                System.out.println("14-> Exit");
+                System.out.println("1: Names of all physicians who are trained in procedure name “bypass surgery”");
+                System.out.println("2: Names of all physicians affiliated with the department name “cardiology” and trained in “bypass surgery”");
+                System.out.println("3: Names of all the nurses who have ever been on call for room 123");
+                System.out.println("4: Names and addresses of all patients who were prescribed the medication named “remdesivir”");
+                System.out.println("5: Name and insurance id of all patients who stayed in the “icu” room type for more than 15 days");
+                System.out.println("6: Names of all nurses who assisted in the procedure name “bypass surgery”");
+                System.out.println("7: Name and position of all nurses who assisted in the procedure name “bypass surgery” along with the names of and the accompanying physicians");
+                System.out.println("8: Obtain the names of all physicians who have performed a medical procedure they have never been trained to perform");
+                System.out.println("9: Names of all physicians who have performed a medical procedure that they are trained to perform, but such that the procedure was done at a date (Undergoes.Date) after the physician's certification expired (Trained_In.CertificationExpires)");
+                System.out.println("10: Same as the previous query, but include the following information in the results: Physician name, name of procedure, date when the procedure was carried out, name of the patient the procedure was carried out on");
+                System.out.println("11: Names of all patients (also include, for each patient, the name of the patient's physician), such that all the following are true:\n\t• The patient has been prescribed some medication by his/her physician\n\t• The patient has undergone a procedure with a cost larger that 5000\n\t• The patient has had at least two appointment where the physician was affiliated with the cardiology department\n\t• The patient's physician is not the head of any department");
+                System.out.println("12: Name and brand of the medication which has been prescribed to the highest number of patients");
+                System.out.println("13: Names of all physicians who are trained in a procedure");
+                System.out.println("14: Exit");
 
                 System.out.print("\nYour choice -> ");
                 int choice = Integer.parseInt(sc.nextLine());
