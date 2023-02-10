@@ -1,6 +1,7 @@
 #include <stdio.h>
-#include <libpq-fe.h>
+#include <libpq-fe.h> // library for database connections
 
+// all the required queries
 char queries[12][900] = {
     "SELECT Physician.Name AS Physician FROM Physician, Trained_In, PROCEDURE WHERE Physician.EmployeeID = Trained_In.Physician AND Trained_In.Treatment = PROCEDURE.Code AND PROCEDURE.Name = 'bypass surgery';",
     "SELECT Physician.Name AS Physician FROM Physician, Trained_In, PROCEDURE, Affiliated_With, Department WHERE Physician.EmployeeID = Trained_In.Physician AND Trained_In.Treatment = PROCEDURE.Code AND PROCEDURE.Name = 'bypass surgery' AND Physician.EmployeeID = Affiliated_With.Physician AND Affiliated_With.Department = Department.DepartmentID AND Department.Name = 'Cardiology';",
@@ -16,6 +17,7 @@ char queries[12][900] = {
     "SELECT Patient.name AS Patient, Physician.name AS Physician FROM Patient, Physician WHERE Physician.EmployeeID = Patient.PCP AND EXISTS ( SELECT Patient FROM Prescribes WHERE Prescribes.Patient = Patient.SSN AND Prescribes.Physician = Patient.PCP ) AND EXISTS ( SELECT Patient FROM Undergoes, Procedure WHERE Undergoes.Patient = Patient.SSN AND Undergoes.Procedure = Procedure.Code AND Procedure.Cost > 5000 ) AND NOT EXISTS ( SELECT DepartmentID FROM Department WHERE Department.Head = Patient.PCP )AND EXISTS ( SELECT Appointment.Patient, Count(AppointmentID) AS AppointmentCount FROM Appointment, Affiliated_With, Department WHERE Appointment.Patient = Patient.SSN AND Appointment.Physician = Affiliated_With.Physician AND Affiliated_With.Department = Department.DepartmentID AND Department.Name = 'Cardiology' GROUP BY Appointment.Patient HAVING Count(AppointmentID) >= 2 );"
 };
 
+// custom print function
 void printResult(PGresult* result) {
 
     int rows = PQntuples(result);
@@ -25,7 +27,7 @@ void printResult(PGresult* result) {
     for(int i = 0; i < cols; i++) {
         printf("%s\t", PQfname(result, i));
     }
-    printf("\n--------------------------------------------\n");
+    printf("\n--------------------------------------------\n"); // header and data divider
 
     for(int i = 0; i < rows; i++) {
         for(int j = 0; j < cols; j++) {
@@ -38,8 +40,10 @@ void printResult(PGresult* result) {
 
 int main() {
     
+    // connection parameters for a local psql db
     PGconn *conn = PQconnectdb("user=invisiblehat dbname=20CS10020 port=5432");
 
+    // status check
     if(PQstatus(conn) == CONNECTION_OK || PQstatus(conn) == CONNECTION_MADE) {
 
         printf("Database Connected\n\n");
@@ -47,6 +51,7 @@ int main() {
         int choice = 0;
         PGresult *result;
 
+        // enter menu
         printf("Welcome to the Hospital Management System!\n\nPlease select a query. Select 14 and you exit.\n");
 
         while(1) {
@@ -71,7 +76,7 @@ int main() {
             if(choice == 14) break;
 
             else if(choice == 13) {
-
+                // special query
                 result = PQexec(conn, "SELECT Name AS Procedure FROM Procedure");
                 printf("Following are the procedures available in the database. Please select one\n");
                 if (PQresultStatus(result) != PGRES_TUPLES_OK) {
@@ -99,7 +104,7 @@ int main() {
                 PQclear(result);
             }
             else {
-
+                // typical queries runner
                 result = PQexec(conn, queries[choice-1]);
                 if (PQresultStatus(result) != PGRES_TUPLES_OK) {
                     printf("No data retrieved\n");        

@@ -12,11 +12,13 @@ public final class App {
     private App() {
     }
 
+    // custom print function
     public static void printResult(ResultSet rs, int columnCount, String[] columnNames) {
         System.out.println();
         for (String column : columnNames) {
             System.out.print(column + "\t");
         }
+        // header and data divider
         System.out.println("\n---------------------------------------------------------");
         try {
             while(rs.next()) {
@@ -37,6 +39,7 @@ public final class App {
      */
     public static void main(String[] args) {
 
+        // all the required queries
         String[] queries = {
             "SELECT Physician.Name FROM Physician, Trained_In, PROCEDURE WHERE Physician.EmployeeID = Trained_In.Physician AND Trained_In.Treatment = PROCEDURE.Code AND PROCEDURE.Name = 'bypass surgery';",
             "SELECT Physician.Name FROM Physician, Trained_In, PROCEDURE, Affiliated_With, Department WHERE Physician.EmployeeID = Trained_In.Physician AND Trained_In.Treatment = PROCEDURE.Code AND PROCEDURE.Name = 'bypass surgery' AND Physician.EmployeeID = Affiliated_With.Physician AND Affiliated_With.Department = Department.DepartmentID AND Department.Name = 'Cardiology';",
@@ -65,11 +68,11 @@ public final class App {
 
         try {
 
-            //connect to db
+            // connect to db
             conn = DriverManager.getConnection(url, props);
             System.out.println("Database connected");
 
-            //enter menu
+            // enter menu
             System.out.println("\nWelcome!\n\nPlease select a query. Select 14 and you exit.");
             while(true) {
                 System.out.println("1: Names of all physicians who are trained in procedure name “bypass surgery”");
@@ -87,11 +90,13 @@ public final class App {
                 System.out.println("13: Names of all physicians who are trained in a procedure");
                 System.out.println("14: Exit");
 
+                // prompt
                 System.out.print("\nYour choice -> ");
                 int choice = Integer.parseInt(sc.nextLine());
 
                 if(choice == 14) break;
                 else if(choice == 13) {
+                    // special query
                     st = conn.createStatement();
                     rs = st.executeQuery("SELECT Name FROM Procedure");
                     System.out.println("Following are the procedures available in the database. Please select one");
@@ -104,6 +109,7 @@ public final class App {
                 else {
                     st = conn.createStatement();
                     rs = st.executeQuery(queries[choice-1]);
+                    // call acording to the needs
                     switch (choice) {
                         case 1:
                         case 2:

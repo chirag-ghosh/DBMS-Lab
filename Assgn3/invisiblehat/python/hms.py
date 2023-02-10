@@ -2,18 +2,20 @@
 
 import psycopg2
 
+# custom print function
 def printResult(rows, cols):
     print()
     for col in cols:
         print(col, end='\t')
-    print("\n-------------------------------------------------------------------")
+    print("\n-------------------------------------------------------------------") # header and data divider
     for row in rows:
         for col in range(len(cols)):
-            print(row[col], end='\t')
+            print(row[col], end='\t') # modified end char to tab space
         print()
     print()
 
 def connect():
+    # all the required queries
     queries = [
         "SELECT Physician.Name AS Physician FROM Physician, Trained_In, PROCEDURE WHERE Physician.EmployeeID = Trained_In.Physician AND Trained_In.Treatment = PROCEDURE.Code AND PROCEDURE.Name = 'bypass surgery';",
         "SELECT Physician.Name AS Physician FROM Physician, Trained_In, PROCEDURE, Affiliated_With, Department WHERE Physician.EmployeeID = Trained_In.Physician AND Trained_In.Treatment = PROCEDURE.Code AND PROCEDURE.Name = 'bypass surgery' AND Physician.EmployeeID = Affiliated_With.Physician AND Affiliated_With.Department = Department.DepartmentID AND Department.Name = 'Cardiology';",
@@ -31,6 +33,7 @@ def connect():
     conn = None
 
     try:
+        # connection parameters for a local psql db
         conn = psycopg2.connect(
             host="localhost",
             port="5432",
@@ -39,8 +42,10 @@ def connect():
             )
         print("Database Connected")
 
+        # init cursor
         cursor = conn.cursor()
         
+        # enter menu
         print("Welcome to the Hospital Management System!\n\nPlease select a query. Select 14 and you exit.\n")
 
         while True:
@@ -59,12 +64,14 @@ def connect():
             print("13: Names of all physicians who are trained in procedure\n")
             print("14: Exit\n")
 
+            # prompt
             print("\nYour choice -> ", end='', flush=True)
             choice = int(input())
 
             if choice == 14:
                 break
             elif choice == 13:
+                # special query
                 cursor.execute("SELECT Name AS Procedure FROM Procedure")
                 rows = cursor.fetchall()
                 cols = [desc[0] for desc in cursor.description]
@@ -81,10 +88,11 @@ def connect():
                 cursor.execute(queries[choice-1])
                 rows = cursor.fetchall()
                 cols = [desc[0] for desc in cursor.description]
-                printResult(rows, cols)
+                printResult(rows, cols) #s pecial print function
 
         cursor.close()
 
+    # error handling
     except (Exception, psycopg2.DatabaseError) as err:
         print("Database connection failed: " + err)
 
