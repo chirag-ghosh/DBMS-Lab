@@ -1,0 +1,3 @@
+[submodule "sekhmet"]
+	path = sekhmet
+	url = https://github.com/chirag-ghosh/Sekhmet.git
