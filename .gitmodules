@@ -1,3 +1,6 @@
 [submodule "sekhmet"]
 	path = sekhmet
 	url = https://github.com/chirag-ghosh/Sekhmet.git
+[submodule "BeRLOS"]
+	path = BeRLOS
+	url = https://github.com/yatindra7/BeRLOS.git
